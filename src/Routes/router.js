@@ -1,17 +1,21 @@
 const {Router} = require('express');
-const productsRouter = require('./productsRouter');
-// const usersRouter = require('./usersRouter');
-const carritoRouter = require('./carritoRouter');
-const pagoRouter = require('./pagoRouter');
-const preferenceRouter = require('./preferenceRouter');
+
+const usersRouter = require('./usersRouter');
+const eventRouter = require('./eventRouter');
+const postRouter = require('./postRouter');
+const login = require('../Controllers/login');
+
+
+
 
 const router = Router();
 
-router.use("/products", productsRouter);
-// router.use("/users", usersRouter);
-router.use("/carrito", carritoRouter);
-router.use("/pago", pagoRouter);
-router.use("/create_preference", preferenceRouter)
+router.use("/users", usersRouter);
+router.use("/event", eventRouter);
+router.use("/post", postRouter);
+router.post("/login", login);
+
+
  module.exports = router;
 
  

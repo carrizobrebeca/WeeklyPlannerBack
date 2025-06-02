@@ -4,10 +4,11 @@ const {
   getUsersHandler,
 } = require("../Handlers/usersHandler");
 
+
 const usersRouter = Router();
 
 usersRouter.get("/", getUsersHandler);
-
 usersRouter.post("/", postUsersHandler);
+
 
 module.exports = usersRouter;

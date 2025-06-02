@@ -1,42 +1,39 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  sequelize.define('Producto', {
+  sequelize.define('Event', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    nombre: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    descripcion: {
+    title: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    precio: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    imagen: {
+    image: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    categoria: {
+    type: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    stock: {
-      type: DataTypes.INTEGER,
+    location: {
+      type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        min: 0, // Asegura que el stock sea mayor o igual a 0
-      },
     },
-    
+    creatorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    }
+
   }, {
-   
+
     timestamps: true, // Habilita los timestamps (createdAt y updatedAt)
   });
 };

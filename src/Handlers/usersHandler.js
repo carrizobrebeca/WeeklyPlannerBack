@@ -1,15 +1,20 @@
-const postUsuarios = require("../Controllers/postUsuarios");
+const getUser = require("../Controllers/getUser");
+const postUser = require("../Controllers/postUser");
 
-const getUsersHandler = (req, res) => {
-    const { nombre } = req.query;
-    if(nombre) res.status(200).send(`user : ${nombre}`);
-  res.status(200).send("aca estan todos los usuarios");
-};
+const getUsersHandler = async (req, res)=>{
+    const {name} = req.query;
+    try {
+      const result = name ? await getUser(name) : await getUser();
+      res.status(200).json(result);
+    } catch (error) {
+      
+    }
+ }
 const postUsersHandler = async (req, res) => {
-  const { nombre, apellido, email, password, imagen } = req.body;
+  const { name, userName, city, password, image } = req.body;
   
   try {
-    const response = await postUsuarios(nombre, apellido, email, password, imagen );
+    const response = await postUser(name, userName, city, password, image );
     res.status(200).json(response);
  } catch (error) {
     res.status(400).json({error: error.message});

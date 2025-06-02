@@ -1,117 +1,76 @@
 require("dotenv").config();
-const { Sequelize } = require("sequelize");
-const productsModel = require("./Models/productsModel");
+const {Sequelize} = require("sequelize");
+const fs = require('fs');
+const path = require('path');
 
-const { DATABASE_URL } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
-const sequelize = new Sequelize(DATABASE_URL, {
-  logging: false,
-  native: false,
+const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+  {
+    logging: false,
+    native: false,
+  }
+);
+const basename = path.basename(__filename);
+
+const modelDefiners = [];
+
+fs.readdirSync(path.join(__dirname, '/models'))
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    modelDefiners.push(require(path.join(__dirname, '/models', file)));
+  });
+
+modelDefiners.forEach(model => model(sequelize));
+
+let entries = Object.entries(sequelize.models);
+let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
+sequelize.models = Object.fromEntries(capsEntries);
+
+const { User, Event, Post, Comment, Like, Follow} = sequelize.models;
+
+User.hasMany(Event);
+Event.belongsTo(User);
+
+User.hasMany(Post);
+Post.belongsTo(User);
+
+Event.hasMany(Post);
+Post.belongsTo(Event);
+
+User.hasMany(Comment);
+Comment.belongsTo(User);
+
+Post.hasMany(Comment);
+Comment.belongsTo(Post);
+User.hasMany(Post);
+Post.belongsTo(User);
+
+Event.hasMany(Post);
+Post.belongsTo(Event);
+// Likes (usuario puede dar like a muchos posts, un post tiene muchos likes)
+User.belongsToMany(Post, { through: 'Like', as: 'LikedPosts' });
+Post.belongsToMany(User, { through: 'Like', as: 'Likers' });
+
+// Followers (auto-relación)
+User.belongsToMany(User, {
+  through: 'Follow',
+  as: 'Followers',
+  foreignKey: 'followingId',
+  otherKey: 'followerId',
 });
-
-// Carga de modelos
-const Producto = productsModel(sequelize);
-
-// Función para probar la conexión
-const testConnection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Conexión establecida con éxito.');
-
-    const results = await sequelize.query('SELECT * FROM Producto');
-    console.log('Resultados:', results);
-  } catch (error) {
-    console.error('No se pudo conectar a la base de datos:', error);
-  }
-};
-
-// Función para sincronizar modelos
-const syncModels = async () => {
-  try {
-    await sequelize.sync({ alter: true }); // Cambia a { force: true } si es necesario
-    console.log("Modelos sincronizados con éxito.");
-  } catch (error) {
-    console.error("Error durante la sincronización:", error);
-  }
-};
-
-// Ejecutar pruebas y sincronización
-const run = async () => {
-  await testConnection();
-  await syncModels();
-};
-
-run();
-
+User.belongsToMany(User, {
+  through: 'Follow',
+  as: 'Following',
+  foreignKey: 'followerId',
+  otherKey: 'followingId',
+});
+Event.belongsTo(User, { as: 'creator' }); // foreignKey: 'creatorId'
+User.hasMany(Event, { as: 'createdEvents', foreignKey: 'creatorId' });
+User.belongsToMany(Event, { through: 'UserEvent', as: 'attendingEvents' });
+Event.belongsToMany(User, { through: 'UserEvent', as: 'attendees' });
 module.exports = {
-  ...sequelize.models,
-  conn: sequelize,
-};
-
-// require("dotenv").config();
-// const { Sequelize } = require("sequelize");
-// const fs = require("fs");
-// const path = require("path");
-// const usuarioModel = require("./Models/usuarioModel");
-// const productsModel = require("./Models/productsModel");
-
-// const carritoModel = require("./Models/carritoModel");
-
-
-// // const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
-
-
-// // const sequelize = new Sequelize(
-// //   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-// //   {
-// //     logging: false,
-// //     native: false,
-// //   }
-// // );
-
-// const { DATABASE_URL } = process.env;
-
-// const sequelize = new Sequelize(DATABASE_URL, {
-//   logging: false,
-//   native: false,
-// });
-// const testConnection = async () => {
-//   try {
-//     await sequelize.authenticate();
-//     console.log('Conexión establecida con éxito.');
-
-//     // Ejecuta una consulta después de la autenticación
-//     const results = await sequelize.query('SELECT * FROM Producto'); // Cambia 'tu_tabla' por el nombre de tu tabla
-//     console.log('Resultados:', results);
-
-//   } catch (error) {
-//     console.error('No se pudo conectar a la base de datos:', error);
-//   } finally {
-//     // Cierra la conexión al final
-//     await sequelize.close();
-//   }
-// };
-
-// testConnection();
-
-// // usuarioModel(sequelize);
-// productsModel(sequelize);
-// // carritoModel(sequelize);
-// // pagoModel(sequelize);// // En sequelize.models están todos los modelos importados como propiedades
-// // const { pProducto} = sequelize.models;
-
-// // Usuario.hasOne(Carrito, { foreignKey: "usuarioId" });
-// // Carrito.belongsTo(Usuario, { foreignKey: "usuarioId" });
-
-// // Carrito.belongsToMany(Producto, { through: "Carrito_Producto" });
-// // Producto.belongsToMany(Carrito, { through: "Carrito_Producto" });
-
-// // Carrito.hasOne(Pago, { foreignKey: "carritoId" });
-// // Pago.belongsTo(Carrito, { foreignKey: "carritoId" });
-// // Sincroniza la base de datos
-
-
-// module.exports = {
-//   ...sequelize.models,
-//   conn: sequelize, 
-// };
+    ...sequelize.models,
+    conn: sequelize,
+  };
