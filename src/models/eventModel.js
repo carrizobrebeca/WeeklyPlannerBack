@@ -26,7 +26,8 @@ module.exports = (sequelize) => {
     location: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
+    }
+    ,
     creatorId: {
       type: DataTypes.UUID,
       allowNull: false,

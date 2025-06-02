@@ -15,14 +15,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true, // El campo 'imagen' es opcional
     },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    eventId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
+    // userId: {
+    //   type: DataTypes.UUID,
+    //   allowNull: false,
+    // },
+    // eventId: {
+    //   type: DataTypes.UUID,
+    //   allowNull: false,
+    // },
 
   }, {
 

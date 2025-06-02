@@ -44,11 +44,7 @@ Comment.belongsTo(User);
 
 Post.hasMany(Comment);
 Comment.belongsTo(Post);
-User.hasMany(Post);
-Post.belongsTo(User);
 
-Event.hasMany(Post);
-Post.belongsTo(Event);
 // Likes (usuario puede dar like a muchos posts, un post tiene muchos likes)
 User.belongsToMany(Post, { through: 'Like', as: 'LikedPosts' });
 Post.belongsToMany(User, { through: 'Like', as: 'Likers' });
