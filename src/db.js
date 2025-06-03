@@ -30,15 +30,22 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { User, Event, Post, Comment, Like, Follow} = sequelize.models;
 
-User.hasMany(Event);
-Event.belongsTo(User);
+//cuando borre la db este no va 
+// User.belongsToMany(User, {
+//   through: 'Follow',
+//   as: 'Followers',
+//   foreignKey: 'followingId',
+//   otherKey: 'followerId',
+// });
+// User.belongsToMany(User, {
+//   through: 'Follow',
+//   as: 'Following',
+//   foreignKey: 'followerId',
+//   otherKey: 'followingId',
+// });
 
-User.hasMany(Post);
-Post.belongsTo(User);
 
-Event.hasMany(Post);
-Post.belongsTo(Event);
-
+//van estos dos de followRequest , mover archovos a model:
 User.hasMany(Comment);
 Comment.belongsTo(User);
 
@@ -49,23 +56,35 @@ Comment.belongsTo(Post);
 User.belongsToMany(Post, { through: 'Like', as: 'LikedPosts' });
 Post.belongsToMany(User, { through: 'Like', as: 'Likers' });
 
-// Followers (auto-relación)
+
 User.belongsToMany(User, {
-  through: 'Follow',
-  as: 'Followers',
-  foreignKey: 'followingId',
-  otherKey: 'followerId',
+  through: 'FollowRequest',
+  as: 'FollowRequestsSent',
+  foreignKey: 'requesterId',
+  otherKey: 'targetId',
 });
 User.belongsToMany(User, {
-  through: 'Follow',
-  as: 'Following',
-  foreignKey: 'followerId',
-  otherKey: 'followingId',
+  through: 'FollowRequest',
+  as: 'FollowRequestsReceived',
+  foreignKey: 'targetId',
+  otherKey: 'requesterId',
 });
-Event.belongsTo(User, { as: 'creator' }); // foreignKey: 'creatorId'
+
+// Evento creado por un usuario
 User.hasMany(Event, { as: 'createdEvents', foreignKey: 'creatorId' });
+Event.belongsTo(User, { as: 'creator', foreignKey: 'creatorId' });
+
+// Usuario invitado a eventos (relación N:M)
 User.belongsToMany(Event, { through: 'UserEvent', as: 'attendingEvents' });
 Event.belongsToMany(User, { through: 'UserEvent', as: 'attendees' });
+
+// Post en evento
+User.hasMany(Post, { foreignKey: 'userId' });
+Post.belongsTo(User, { foreignKey: 'userId' });
+
+Event.hasMany(Post, { foreignKey: 'eventId' });
+Post.belongsTo(Event, { foreignKey: 'eventId' });
+
 module.exports = {
     ...sequelize.models,
     conn: sequelize,

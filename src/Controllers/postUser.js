@@ -2,13 +2,6 @@ const { User } = require("../db");
 
 const postUser = async (name, userName, city, password, image) => {
   
-
-
-
-
-
-
-
     const UserExistente = await User.findOne({ where: { userName } });
     if (UserExistente) {
       return res

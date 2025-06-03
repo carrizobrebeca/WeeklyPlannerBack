@@ -17,6 +17,7 @@ const postPostHandler = async (req, res) => {
     const response = await postPost( image, description, userId, eventId );
     res.status(200).json(response);
  } catch (error) {
+     console.error("ERROR POST /post:", error); 
     res.status(400).json({error: error.message});
  }  
 };

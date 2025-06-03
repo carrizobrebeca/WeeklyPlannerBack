@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       primaryKey: true, // Establece el ID como clave primaria
     },
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false, 
     },
    

@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     image: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     type: {
@@ -31,8 +31,15 @@ module.exports = (sequelize) => {
     creatorId: {
       type: DataTypes.UUID,
       allowNull: false,
+    },
+ eventDate: {
+      type: DataTypes.DATEONLY, // Solo la fecha (YYYY-MM-DD)
+      allowNull: false,
+    },
+    eventTime: {
+      type: DataTypes.TIME, // Solo la hora (HH:mm:ss)
+      allowNull: false,
     }
-
   }, {
 
     timestamps: true, // Habilita los timestamps (createdAt y updatedAt)

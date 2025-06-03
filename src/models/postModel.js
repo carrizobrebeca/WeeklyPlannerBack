@@ -12,20 +12,20 @@ module.exports = (sequelize) => {
       allowNull: false, // El campo 'description' es opcional
     },
     image: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true, // El campo 'imagen' es opcional
     },
-    // userId: {
-    //   type: DataTypes.UUID,
-    //   allowNull: false,
-    // },
-    // eventId: {
-    //   type: DataTypes.UUID,
-    //   allowNull: false,
-    // },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    eventId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
 
   }, {
 
-    timestamps: true, // Deshabilita los timestamps (createdAt y updatedAt)
+    timestamps: true, //abilita los timestamps (createdAt y updatedAt)
   });
 };
