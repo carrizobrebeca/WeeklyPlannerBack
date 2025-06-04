@@ -25,4 +25,4 @@ const login = async (req, res) => {
   return res.status(500).json({ message: "Error en el servidor" });
 }
 };
-module.exports = login
+module.exports = login;

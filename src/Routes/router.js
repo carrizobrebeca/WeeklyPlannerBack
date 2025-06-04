@@ -10,8 +10,14 @@ const { sendFollowRequest } = require('../Handlers/followRequestHandler');
 const requireAuth = require('../middlewares/middlewere');
 const getFollowRequests = require('../Controllers/getFollowRequests');
 
-const router = Router();
 
+const router = Router();
+// console.log('requireAuth:', typeof requireAuth);
+// console.log('sendFollowRequest:', typeof sendFollowRequest);
+// console.log('acceptFollowRequest:', typeof acceptFollowRequest);
+// console.log('rejectFollowRequest:', typeof rejectFollowRequest);
+// console.log('getFollowRequests:', typeof getFollowRequests);
+// console.log('login:', typeof login);
 
 router.post('/request/:id', requireAuth, sendFollowRequest);
 router.put('/accept/:requestId', requireAuth, acceptFollowRequest);

@@ -28,7 +28,21 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Event, Post, Comment, Like, Follow} = sequelize.models;
+const { User, Event, Post, Comment, Like, Follow, Notification} = sequelize.models;
+
+
+Notification.belongsTo(User, { as: 'recipient', foreignKey: 'recipientId' });
+Notification.belongsTo(User, { as: 'actor', foreignKey: 'actorId' });
+
+User.hasMany(Comment);
+Comment.belongsTo(User);
+
+Post.hasMany(Comment);
+Comment.belongsTo(Post);
+
+// Likes (usuario puede dar like a muchos posts, un post tiene muchos likes)
+User.belongsToMany(Post, { through: 'Like', as: 'LikedPosts' });
+Post.belongsToMany(User, { through: 'Like', as: 'Likers' });
 
 //cuando borre la db este no va 
 // User.belongsToMany(User, {
@@ -46,17 +60,6 @@ const { User, Event, Post, Comment, Like, Follow} = sequelize.models;
 
 
 //van estos dos de followRequest , mover archovos a model:
-User.hasMany(Comment);
-Comment.belongsTo(User);
-
-Post.hasMany(Comment);
-Comment.belongsTo(Post);
-
-// Likes (usuario puede dar like a muchos posts, un post tiene muchos likes)
-User.belongsToMany(Post, { through: 'Like', as: 'LikedPosts' });
-Post.belongsToMany(User, { through: 'Like', as: 'Likers' });
-
-
 User.belongsToMany(User, {
   through: 'FollowRequest',
   as: 'FollowRequestsSent',

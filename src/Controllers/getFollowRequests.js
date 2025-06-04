@@ -1,4 +1,4 @@
-const { FollowRequest } = require('../db');
+const { FollowRequest, User } = require('../db');
 
 const getFollowRequests = async (req, res) => {
   const requests = await FollowRequest.findAll({
@@ -9,4 +9,4 @@ const getFollowRequests = async (req, res) => {
   res.json(requests);
 };
 
-module.exports = { getFollowRequests }
+module.exports = getFollowRequests;

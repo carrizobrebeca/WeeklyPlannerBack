@@ -17,7 +17,11 @@ const acceptFollowRequest = async (req, res) => {
   const following = await User.findByPk(request.targetId);
 
   await follower.addFollowing(following);
-
+ await Notification.create({
+      type: "request_accepted",
+      recipientId: request.senderId, // el que mandó la solicitud
+      actorId: req.user.id,          // el que aceptó
+    });
   res.json({ message: 'Solicitud aceptada.' });
 };
 
