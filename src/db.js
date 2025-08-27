@@ -28,65 +28,16 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Event, Post, Comment, Like, Follow, Notification} = sequelize.models;
+const {  Reminder, ReminderRow, ToDo, ToDoRow} = sequelize.models;
 
 
-Notification.belongsTo(User, { as: 'recipient', foreignKey: 'recipientId' });
-Notification.belongsTo(User, { as: 'actor', foreignKey: 'actorId' });
+ToDo.hasMany(ToDoRow);
+ToDoRow.belongsTo(ToDo);
 
-User.hasMany(Comment);
-Comment.belongsTo(User);
+Reminder.hasMany(ReminderRow);
 
-Post.hasMany(Comment);
-Comment.belongsTo(Post);
+ReminderRow.belongsTo(Reminder);
 
-// Likes (usuario puede dar like a muchos posts, un post tiene muchos likes)
-User.belongsToMany(Post, { through: 'Like', as: 'LikedPosts' });
-Post.belongsToMany(User, { through: 'Like', as: 'Likers' });
-
-//cuando borre la db este no va 
-// User.belongsToMany(User, {
-//   through: 'Follow',
-//   as: 'Followers',
-//   foreignKey: 'followingId',
-//   otherKey: 'followerId',
-// });
-// User.belongsToMany(User, {
-//   through: 'Follow',
-//   as: 'Following',
-//   foreignKey: 'followerId',
-//   otherKey: 'followingId',
-// });
-
-
-//van estos dos de followRequest , mover archovos a model:
-User.belongsToMany(User, {
-  through: 'FollowRequest',
-  as: 'FollowRequestsSent',
-  foreignKey: 'requesterId',
-  otherKey: 'targetId',
-});
-User.belongsToMany(User, {
-  through: 'FollowRequest',
-  as: 'FollowRequestsReceived',
-  foreignKey: 'targetId',
-  otherKey: 'requesterId',
-});
-
-// Evento creado por un usuario
-User.hasMany(Event, { as: 'createdEvents', foreignKey: 'creatorId' });
-Event.belongsTo(User, { as: 'creator', foreignKey: 'creatorId' });
-
-// Usuario invitado a eventos (relación N:M)
-User.belongsToMany(Event, { through: 'UserEvent', as: 'attendingEvents' });
-Event.belongsToMany(User, { through: 'UserEvent', as: 'attendees' });
-
-// Post en evento
-User.hasMany(Post, { foreignKey: 'userId' });
-Post.belongsTo(User, { foreignKey: 'userId' });
-
-Event.hasMany(Post, { foreignKey: 'eventId' });
-Post.belongsTo(Event, { foreignKey: 'eventId' });
 
 module.exports = {
     ...sequelize.models,

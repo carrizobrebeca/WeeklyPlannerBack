@@ -1,47 +1,29 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  sequelize.define('Event', {
+  sequelize.define('Note', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
+      title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    title: {
+          description: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    image: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    location: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }
-    ,
-    creatorId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
- eventDate: {
+    date: {
       type: DataTypes.DATEONLY, // Solo la fecha (YYYY-MM-DD)
       allowNull: false,
     },
-    eventTime: {
-      type: DataTypes.TIME, // Solo la hora (HH:mm:ss)
-      allowNull: false,
-    }
+        isFavorite: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
-
     timestamps: true, // Habilita los timestamps (createdAt y updatedAt)
   });
 };
