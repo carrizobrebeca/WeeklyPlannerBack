@@ -25,12 +25,12 @@ module.exports = (sequelize) => {
       allowNull: false
     },
     day: {
-      type: DataTypes.ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
-      allowNull: false,
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     task: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   }, {
     timestamps: true, // Habilita los timestamps (createdAt y updatedAt)

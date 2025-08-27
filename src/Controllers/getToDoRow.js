@@ -1,10 +1,10 @@
-const { ToDo } = require('../db');
+const { ToDoRow } = require('../db');
 
 
 const getToDoRow = async (idToDo) => {
  
 
-  const toDoDb = await ToDo.findAll({
+  const toDoDb = await ToDoRow.findAll({
     where: {
       idToDo: idToDo
     }
