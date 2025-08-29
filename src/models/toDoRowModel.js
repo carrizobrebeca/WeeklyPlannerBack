@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
       defaultValue: false,
     },
     trimeEnd: {
-      type: DataTypes.TIME, // Solo la hora (HH:mm:ss)
+      type: DataTypes.DATE, 
       allowNull: false,
     },
     idToDo: {

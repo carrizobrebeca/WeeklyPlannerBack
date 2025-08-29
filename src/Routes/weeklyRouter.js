@@ -6,7 +6,7 @@ const { putWeeklyHandler, postWeeklyHandler, getWeeklyHandler } = require("../Ha
 const weeklyRouter = Router();
 
 weeklyRouter.get("/", getWeeklyHandler);
-weeklyRouter.put("/", putWeeklyHandler);
+weeklyRouter.put("/:hour", putWeeklyHandler);
 weeklyRouter.post("/", postWeeklyHandler);
 
 module.exports = weeklyRouter;

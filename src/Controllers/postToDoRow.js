@@ -1,8 +1,8 @@
 const { ToDoRow } = require("../db");
 
-const postToDoRow = async (title) => {
+const postToDoRow = async (name, trimeEnd, idToDo) => {
 
-     return await ToDoRow.create({ title});
+     return await ToDoRow.create({ name, trimeEnd, idToDo});
 };
 
 module.exports = postToDoRow;

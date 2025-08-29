@@ -4,7 +4,7 @@ const { putFoodHandler, postFoodHandler, getFoodHandler } = require("../Handlers
 const foodRouter = Router();
 
 foodRouter.get("/", getFoodHandler);
-foodRouter.put("/", putFoodHandler);
+foodRouter.put("/:hour", putFoodHandler);
 foodRouter.post("/", postFoodHandler);
 
 module.exports = foodRouter;

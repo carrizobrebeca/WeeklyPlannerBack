@@ -4,9 +4,9 @@ const { getToDoRow } = require("../Controllers/getToDoRow");
 
 
 const getToDoRowHandler = async (req, res)=>{
-
+const { idToDo } = req.params; 
     try {
-      const result =  await getToDoRow();
+      const result =  await getToDoRow(idToDo);
       res.status(200).json(result);
     } catch (error) {
       
@@ -14,9 +14,9 @@ const getToDoRowHandler = async (req, res)=>{
  }
  
 const postToDoRowHandler = async (req, res) => {
-  const { title } = req.body;
+  const { name, trimeEnd, idToDo } = req.body;
   try {
-    const response = await postToDoRow( title);
+    const response = await postToDoRow( name, trimeEnd, idToDo);
     res.status(200).json(response);
  } catch (error) {
      console.error("ERROR POST /ToDo:", error); 
